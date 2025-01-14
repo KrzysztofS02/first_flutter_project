@@ -87,6 +87,8 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
         await addNote();
       }
     }
+
+    Navigator.pop(context);
   }
   Future updateNote() async {
     final note = widget.note!.copy(
