@@ -68,7 +68,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white,
-          backgroundColor: isFormValid ? null : Colors.grey.shade700,
+          backgroundColor: isFormValid ? Colors.blue.shade500 : Colors.grey.shade700,
         ),
         onPressed: addOrUpdateNote,
         child: const Text('Save'),
