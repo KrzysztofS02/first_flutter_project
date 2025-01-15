@@ -9,15 +9,6 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   runApp(const MainApp());
-
-  // runApp(
-  //   const MaterialApp(
-  //     title: 'Navigation Basics',
-  //     debugShowCheckedModeBanner: false,
-  //     home: LoginView(),
-  //   ),
-  // );
-
 }
 
 class MainApp extends StatelessWidget {

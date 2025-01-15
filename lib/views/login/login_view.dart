@@ -14,7 +14,26 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-bool boolValue = false;
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  final String correctEmail = 'krzysztof.stepien@gmail.com';
+  final String correctPassword = '123456789';
+
+  void login() {
+    if (usernameController.text == correctEmail &&
+        passwordController.text == correctPassword) {
+      print('Login ok, go to HomeView');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeView()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Invalid Login or Password')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +67,7 @@ bool boolValue = false;
                 child: BasicTextFormField(
                   icon: Icons.person_outline,
                   marker: "Email or User Name",
+                  controller: usernameController,
                 )
               ),
 
@@ -58,6 +78,7 @@ bool boolValue = false;
                   icon: Icons.lock_outline,
                   marker: "Password",
                   Password: true,
+                  controller: passwordController,
                 ),
               ),
 
@@ -93,12 +114,7 @@ bool boolValue = false;
                     backgroundColor: MyColors.signInColor,
                     minimumSize: Size(390, 50),
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeView()),
-                    );
-                  },
+                  onPressed: login,
                 ),
               ),
 

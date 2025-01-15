@@ -6,6 +6,7 @@ class BasicTextFormField extends StatefulWidget {
   final IconData? iconButton;
   final String? marker;
   final bool Password;
+  final TextEditingController? controller;
 
   const BasicTextFormField({
     super.key,
@@ -13,7 +14,7 @@ class BasicTextFormField extends StatefulWidget {
     this.marker,
     this.iconButton,
     this.Password = false,
-
+    this.controller,
   });
 
   @override
@@ -28,6 +29,7 @@ class _BasicTextFormFieldState extends State<BasicTextFormField> {
   Widget build(BuildContext context) {
     return TextFormField(
       obscureText: widget.Password ? _obscureText:false,
+      controller: widget.controller,
       decoration: InputDecoration(
         prefixIcon: Icon(widget.icon),
         suffixIcon: widget.Password ?
