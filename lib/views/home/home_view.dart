@@ -1,8 +1,12 @@
+// ignore_for_file: strict_raw_type, inference_failure_on_instance_creation
+
 import 'package:dsw_51744/utils/my_colours.dart';
 import 'package:dsw_51744/views/database/notes_database.dart';
+import 'package:dsw_51744/views/login/login_view.dart';
 import 'package:dsw_51744/views/model/note.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../notes_pages/edit_note_page.dart';
 import '../notes_pages/note_detail_page.dart';
@@ -41,30 +45,46 @@ class _HomeViewState extends State<HomeView> {
     setState(() => isLoading = false);
   }
 
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("isLoggedIn", false);
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => LoginView()), (route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade900,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Notes',
           style: TextStyle(fontSize: 24),
         ),
-        actions: [Icon(Icons.search),SizedBox(width: 12,)],
+        actions: [
+          IconButton(
+            onPressed: logout,
+            icon: Icon(Icons.logout),
+          ),
+          SizedBox(
+            width: 12,
+          ),
+        ],
       ),
       //resizeToAvoidBottomInset: false,
       body: Center(
-        child: isLoading
-            ? CircularProgressIndicator()
-            : notes.isEmpty
-                ? Text(
-                    'No Notes',
-                     style: TextStyle(color: MyColors.whiteColor, fontSize: 24),
-                )
-                : buildNotes()
-      ),
+          child: isLoading
+              ? CircularProgressIndicator()
+              : notes.isEmpty
+                  ? Text(
+                      'No Notes',
+                      style:
+                          TextStyle(color: MyColors.whiteColor, fontSize: 24),
+                    )
+                  : buildNotes()),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.blueGrey,
         child: const Icon(Icons.add),
         onPressed: () async {
           await Navigator.of(context).push(
@@ -78,25 +98,24 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget buildNotes() => StaggeredGridView.countBuilder(
-    padding: EdgeInsets.all(8),
-    itemCount: notes.length,
-    staggeredTileBuilder: (index) => StaggeredTile.fit(2),
-    crossAxisCount: 4,
-    mainAxisSpacing: 4,
-    crossAxisSpacing: 4,
-    itemBuilder: (context, index) {
-      final note = notes[index];
+        padding: EdgeInsets.all(8),
+        itemCount: notes.length,
+        staggeredTileBuilder: (index) => StaggeredTile.fit(2),
+        crossAxisCount: 4,
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        itemBuilder: (context, index) {
+          final note = notes[index];
 
-      return GestureDetector(
-        onTap: () async {
-          await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => NoteDetailPage(noteId: note.id!)
-          ));
+          return GestureDetector(
+            onTap: () async {
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => NoteDetailPage(noteId: note.id!)));
 
-          refreshNotes();
+              refreshNotes();
+            },
+            child: NoteCardWidget(note: note, index: index),
+          );
         },
-        child: NoteCardWidget(note: note, index: index),
       );
-    },
-  );
 }

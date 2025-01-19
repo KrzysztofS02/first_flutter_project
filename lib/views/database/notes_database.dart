@@ -1,11 +1,10 @@
-import 'dart:convert';
+// ignore_for_file: strict_raw_type
 
 import 'package:dsw_51744/views/model/note.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-
-class NotesDatabase{
+class NotesDatabase {
   static final NotesDatabase instance = NotesDatabase._init();
 
   static Database? _database;
@@ -19,7 +18,7 @@ class NotesDatabase{
     return _database!;
   }
 
-  Future<Database> _initDB(String filePath) async{
+  Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
@@ -27,11 +26,10 @@ class NotesDatabase{
   }
 
   Future _createDB(Database db, int version) async {
-    final idType ='INTEGER PRIMARY KEY AUTOINCREMENT';
+    final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     final textType = 'TEXT NOT NULL';
     final boolType = 'BOOLEAN NOT NULL';
     final integerType = 'INTEGER NOT NULL';
-
 
     await db.execute('''
 CREATE TABLE $tableNote(
@@ -55,12 +53,10 @@ CREATE TABLE $tableNote(
   Future<Note> readNote(int id) async {
     final db = await instance.database;
 
-    final maps = await db.query(
-      tableNote,
-      columns: NoteFields.values,
-      where: '${NoteFields.id} = ?',
-      whereArgs: [id],
-    );
+    final maps = await db.query(tableNote,
+        columns: NoteFields.values,
+        where: '${NoteFields.id} = ?',
+        whereArgs: [id]);
 
     if (maps.isNotEmpty) {
       return Note.fromJson(maps.first);
@@ -81,28 +77,20 @@ CREATE TABLE $tableNote(
   Future<int> update(Note note) async {
     final db = await instance.database;
 
-    return db.update(
-      tableNote,
-      note.toJson(),
-      where: '${NoteFields.id} = ?',
-      whereArgs: [note.id],
-    );
+    return db.update(tableNote, note.toJson(),
+        where: '${NoteFields.id} = ?', whereArgs: [note.id]);
   }
 
   Future<int> delete(int id) async {
     final db = await instance.database;
 
-    return await db.delete(
-      tableNote,
-      where: '${NoteFields.id} = ?',
-      whereArgs: [id],
-    );
+    return await db
+        .delete(tableNote, where: '${NoteFields.id} = ?', whereArgs: [id]);
   }
 
-  Future close () async{
+  Future close() async {
     final db = await instance.database;
 
     db.close();
   }
 }
-
