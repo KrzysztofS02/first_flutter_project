@@ -1,6 +1,8 @@
+import 'package:dsw_51744/views/home/home_view.dart';
 import 'package:dsw_51744/views/login/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -8,13 +10,17 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  runApp(const MainApp());
+
+  final isLoggedIn = await checkLoginStatus();
+
+  runApp(MainApp(isLoggedIn: isLoggedIn));
 }
 
 class MainApp extends StatelessWidget {
   static String title = 'Notes SQLite';
+  final bool isLoggedIn;
 
-  const MainApp({super.key});
+  const MainApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +34,17 @@ class MainApp extends StatelessWidget {
           elevation: 0,
         ),
       ),
-      home: const LoginView(),
+      home: isLoggedIn ? const HomeView() : const LoginView(),
     );
   }
+}
+
+Future<bool> checkLoginStatus() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('isLoggedIn') ?? false;
+}
+
+Future<void> setLoginStatus(bool status) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('isLoggedIn', status);
 }

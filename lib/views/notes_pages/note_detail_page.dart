@@ -1,3 +1,5 @@
+// ignore_for_file: strict_raw_type, inference_failure_on_instance_creation
+
 import 'package:dsw_51744/utils/my_colours.dart';
 import 'package:dsw_51744/views/database/notes_database.dart';
 import 'package:dsw_51744/views/model/note.dart';
@@ -9,7 +11,7 @@ import 'edit_note_page.dart';
 class NoteDetailPage extends StatefulWidget {
   final int noteId;
 
-  const NoteDetailPage ({
+  const NoteDetailPage({
     Key? key,
     required this.noteId,
   }) : super(key: key);
@@ -79,24 +81,25 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             ),
     );
   }
+
   Widget editButton() => IconButton(
-    icon: Icon(Icons.edit_outlined),
-    onPressed: () async {
-      if (isLoading) return;
+        icon: Icon(Icons.edit_outlined),
+        onPressed: () async {
+          if (isLoading) return;
 
-      await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => AddEditNotePage(note: note),
-      ));
+          await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => AddEditNotePage(note: note),
+          ));
 
-      refreshNote();
-    },
-  );
+          refreshNote();
+        },
+      );
   Widget deleteButton() => IconButton(
-    icon: Icon(Icons.delete),
-    onPressed: () async {
-      await NotesDatabase.instance.delete(widget.noteId);
+        icon: Icon(Icons.delete),
+        onPressed: () async {
+          await NotesDatabase.instance.delete(widget.noteId);
 
-      Navigator.of(context).pop();
-    },
-  );
+          Navigator.of(context).pop();
+        },
+      );
 }

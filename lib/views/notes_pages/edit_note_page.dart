@@ -1,8 +1,8 @@
-import 'package:dsw_51744/utils/my_colours.dart';
+// ignore_for_file: strict_raw_type
+
 import 'package:dsw_51744/views/database/notes_database.dart';
 import 'package:dsw_51744/views/model/note.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../widgets/note_form_widget.dart';
 
@@ -12,7 +12,7 @@ class AddEditNotePage extends StatefulWidget {
   const AddEditNotePage({
     Key? key,
     this.note,
-  }): super(key: key);
+  }) : super(key: key);
 
   @override
   State<AddEditNotePage> createState() => _AddEditNotePageState();
@@ -34,7 +34,6 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
     title = widget.note?.title ?? '';
     description = widget.note?.description ?? '';
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +59,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
       ),
     );
   }
+
   Widget buildButton() {
     final isFormValid = title.isNotEmpty && description.isNotEmpty;
 
@@ -68,18 +68,20 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white,
-          backgroundColor: isFormValid ? Colors.blue.shade500 : Colors.grey.shade700,
+          backgroundColor:
+              isFormValid ? Colors.blue.shade500 : Colors.grey.shade700,
         ),
         onPressed: addOrUpdateNote,
         child: const Text('Save'),
       ),
     );
   }
+
   void addOrUpdateNote() async {
     final isValid = _formKey.currentState!.validate();
 
     if (isValid) {
-      final isUpdating =widget.note != null;
+      final isUpdating = widget.note != null;
 
       if (isUpdating) {
         await updateNote();
@@ -90,13 +92,13 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
 
     Navigator.pop(context);
   }
+
   Future updateNote() async {
     final note = widget.note!.copy(
-      isImportant: isImportant,
-      number: number,
-      title: title,
-      description: description,
-    );
+        isImportant: isImportant,
+        number: number,
+        title: title,
+        description: description);
 
     await NotesDatabase.instance.update(note);
   }
@@ -107,8 +109,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
         isImportant: true,
         number: number,
         description: description,
-        createdTime: DateTime.now()
-    );
+        createdTime: DateTime.now());
 
     await NotesDatabase.instance.create(note);
   }
