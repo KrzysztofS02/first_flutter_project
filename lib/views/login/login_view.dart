@@ -36,21 +36,27 @@ class _LoginViewState extends State<LoginView> {
     return {'username': username, 'password': password};
   }
 
+  Future<void> saveLoginState(bool isLoggedIn) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', isLoggedIn);
+  }
+
+  Future<bool> getLoginState() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isLoggedIn') ?? false;
+  }
+
   void login() async {
-    final savedCredentials = await getCredentials();
+    // final savedCredentials = await getCredentials();
 
     if (usernameController.text == correctEmail &&
         passwordController.text == correctPassword) {
       await saveCredentials(usernameController.text, passwordController.text);
-      print('Login ok, go to HomeView');
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeView()),
-      );
-    } else if (usernameController.text == savedCredentials['username'] &&
-        passwordController.text == savedCredentials['password']) {
-      print('Login ok (z zapisem danych), go Home View');
-      Navigator.push(
+
+      await saveLoginState(true);
+
+      print('Login ok, go HomeView');
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeView()),
       );
@@ -58,6 +64,20 @@ class _LoginViewState extends State<LoginView> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Invalid Login or Password')),
       );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkLoginState();
+  }
+
+  Future<void> checkLoginState() async {
+    final isLoggedIn = await getLoginState();
+    if (isLoggedIn) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomeView()));
     }
   }
 

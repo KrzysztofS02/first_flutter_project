@@ -11,7 +11,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  final isLoggedIn = await checkLoginStatus();
+  final isLoggedIn = await _checkLoginStatus();
 
   runApp(MainApp(isLoggedIn: isLoggedIn));
 }
@@ -39,7 +39,7 @@ class MainApp extends StatelessWidget {
   }
 }
 
-Future<bool> checkLoginStatus() async {
+Future<bool> _checkLoginStatus() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getBool('isLoggedIn') ?? false;
 }
