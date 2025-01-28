@@ -181,7 +181,7 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     GestureDetector(
                       child: Text(
-                        'Sing up',
+                        'Sign up',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
