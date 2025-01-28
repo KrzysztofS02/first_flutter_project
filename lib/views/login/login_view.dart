@@ -47,8 +47,6 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void login() async {
-    // final savedCredentials = await getCredentials();
-
     if (usernameController.text == correctEmail &&
         passwordController.text == correctPassword) {
       await saveCredentials(usernameController.text, passwordController.text);
