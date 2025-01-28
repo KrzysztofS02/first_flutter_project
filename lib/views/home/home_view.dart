@@ -52,45 +52,47 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blueGrey.shade900,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          'Notes',
-          style: TextStyle(fontSize: 24),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.blueGrey.shade900,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(
+            'Notes',
+            style: TextStyle(fontSize: 24, color: MyColors.whiteColor),
+          ),
+          actions: [
+            IconButton(
+              onPressed: logout,
+              icon: Icon(Icons.logout, color: MyColors.whiteColor,),
+            ),
+            SizedBox(
+              width: 12,
+            ),
+          ],
         ),
-        actions: [
-          IconButton(
-            onPressed: logout,
-            icon: Icon(Icons.logout),
-          ),
-          SizedBox(
-            width: 12,
-          ),
-        ],
-      ),
-      //resizeToAvoidBottomInset: false,
-      body: Center(
-          child: isLoading
-              ? CircularProgressIndicator()
-              : notes.isEmpty
-                  ? Text(
-                      'No Notes',
-                      style:
-                          TextStyle(color: MyColors.whiteColor, fontSize: 24),
-                    )
-                  : buildNotes()),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blueGrey,
-        child: const Icon(Icons.add),
-        onPressed: () async {
-          await Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const AddEditNotePage()),
-          );
-
-          refreshNotes();
-        },
+        //resizeToAvoidBottomInset: false,
+        body: Center(
+            child: isLoading
+                ? CircularProgressIndicator()
+                : notes.isEmpty
+                    ? Text(
+                        'No Notes',
+                        style:
+                            TextStyle(color: MyColors.whiteColor, fontSize: 24),
+                      )
+                    : buildNotes()),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.blueGrey,
+          child: const Icon(Icons.add),
+          onPressed: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const AddEditNotePage()),
+            );
+      
+            refreshNotes();
+          },
+        ),
       ),
     );
   }
